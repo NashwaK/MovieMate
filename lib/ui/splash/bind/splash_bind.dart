@@ -19,7 +19,7 @@ class SplashController extends GetxController {
   void onInit() {
     super.onInit();
     3.cSeconds.cDelay(() {
-      Get.toNamed(Routes.home);
+      Get.toNamed(Routes.firstWelcome);
     });
   }
 }
