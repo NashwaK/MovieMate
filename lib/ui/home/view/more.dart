@@ -1,11 +1,14 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_utils/flutter_custom_utils.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:movie_mate/res/colors.dart';
 import 'package:movie_mate/res/images.dart';
 import 'package:movie_mate/res/style.dart';
 import 'package:movie_mate/ui/home/bind/home_bind.dart';
+import 'package:movie_mate/utilities/app_route.dart';
 
 class FirstPart extends StatelessWidget {
   const FirstPart({super.key});
@@ -56,13 +59,17 @@ class FirstPart extends StatelessWidget {
         // Top Content
         Positioned.fill(
           child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: TextfieldPart(),
-              ),
-            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextfieldPart().cExpanded(1),
+                IconButton(
+                    onPressed: (){
+                      Get.toNamed(Routes.wishList);
+                    },
+                    icon: Icon(Icons.favorite_border,size: 35,color: Colors.white,)).cPadOnly(t: 10).cExpanded(0)
+              ],
+            ).cPadSymmetric(h: 10),
           ),
         ),
       ],
@@ -104,41 +111,41 @@ class OverlayProductsPart extends StatelessWidget {
     return GetBuilder<HomeController>(
       builder: (logic) {
         return SizedBox(
-          height: 240, // enough height for scaling
+          height: 240,
           child: PageView.builder(
             controller: logic.pageViewController,
             itemCount: 10,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              // calculate scale for center item
-              double scale = 1.0;
-              scale = (index == logic.currentPage.floor() || index == logic.currentPage.ceil())
-                  ? 1.0 + (1 - (logic.currentPage - index).abs()).clamp(0.0, 1.0) * 0.3
-                  : 1.0;
+              // calculate vertical offset (lift the current item up)
+              double offset = 0.0;
+              if (index == logic.currentPage.floor() || index == logic.currentPage.ceil()) {
+                offset = -20 *
+                    (1 - (logic.currentPage - index).abs()).clamp(0.0, 1.0); // move up to 20px
+              }
 
-              return TweenAnimationBuilder(
-                duration: const Duration(milliseconds: 200),
-                tween: Tween<double>(begin: 1, end: scale),
-                builder: (context, value, child) {
-                  return Transform.scale(
-                    scale: value,
-                    child: child,
-                  );
-                },
+              return Transform.translate(
+                offset: Offset(0, offset),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
                       image: AssetImage(homeBanner),
                       fit: BoxFit.cover,
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.15),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Stack(
                     children: [
-                      // Bottom button
                       Positioned(
-                        bottom: 30,
+                        bottom: 10,
                         left: 0,
                         right: 0,
                         child: Center(
@@ -167,6 +174,7 @@ class OverlayProductsPart extends StatelessWidget {
   }
 }
 
+
 class TrendingMovieGrid extends StatelessWidget {
   const TrendingMovieGrid({super.key});
 
@@ -174,17 +182,23 @@ class TrendingMovieGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (logic) {
-        return SizedBox(
-          height: 120,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 10,
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemBuilder: (context, i) {
-              return Container(
-                width: 190, // fixed width for each item
-                margin: const EdgeInsets.only(right: 12),
+        return GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15,
+            mainAxisSpacing: 12,
+            childAspectRatio: 0.9,
+          ),
+          itemCount: 10,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          // padding: const EdgeInsets.symmetric(horizontal: 16),
+          itemBuilder: (context, i) {
+            return GestureDetector(
+              onTap: (){
+                Get.toNamed(Routes.movieDetails);
+              },
+              child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   image: DecorationImage(
@@ -199,111 +213,103 @@ class TrendingMovieGrid extends StatelessWidget {
                     ),
                   ],
                 ),
-              );
-            },
-          ),
+              ),
+            );
+          },
         );
       },
     );
   }
 }
 
-
-
-// class ProductsPart extends StatelessWidget {
-//   const ProductsPart({super.key});
+// class TrendingMovieGrid extends StatelessWidget {
+//   const TrendingMovieGrid({super.key});
 //
 //   @override
 //   Widget build(BuildContext context) {
 //     return GetBuilder<HomeController>(
-//         builder: (logic) {
-//           return SizedBox(
-//             height: 190, // fix height for your product cards
-//             child: MasonryGridView.count(
-//               crossAxisCount: 1, // single row
-//               scrollDirection: Axis.horizontal,
-//               mainAxisSpacing: 12,
-//               crossAxisSpacing: 12,
-//               padding: EdgeInsets.symmetric(horizontal: 12),
-//               itemCount: 10,
-//               itemBuilder: (context, i) {
-//                 return Container(
-//                   width: 150,
-//                   decoration: BoxDecoration(
-//                     borderRadius: BorderRadius.circular(10),
-//                     image: DecorationImage(
-//                       image: AssetImage(homeBanner),
-//                       fit: BoxFit.cover,
-//                     ),
+//       builder: (logic) {
+//         return SizedBox(
+//           height: 120,
+//           child: ListView.builder(
+//             scrollDirection: Axis.horizontal,
+//             itemCount: 10,
+//             physics: const BouncingScrollPhysics(),
+//             // padding: const EdgeInsets.symmetric(horizontal: 16),
+//             itemBuilder: (context, i) {
+//               return Container(
+//                 width: 190, // fixed width for each item
+//                 margin: const EdgeInsets.only(right: 12),
+//                 decoration: BoxDecoration(
+//                   borderRadius: BorderRadius.circular(16),
+//                   image: DecorationImage(
+//                     image: AssetImage(homeBanner),
+//                     fit: BoxFit.cover,
 //                   ),
-//                 );
-//               },
-//             ),
-//           );
-//         }
+//                   boxShadow: [
+//                     BoxShadow(
+//                       color: Colors.black.withOpacity(0.2),
+//                       blurRadius: 4,
+//                       offset: const Offset(0, 2),
+//                     ),
+//                   ],
+//                 ),
+//               );
+//             },
+//           ),
+//         );
+//       },
 //     );
 //   }
 // }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class BackColorLeft extends StatelessWidget {
-  const BackColorLeft({super.key});
+class CarouselExample extends StatelessWidget {
+  const CarouselExample({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250,
-      height: 250,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.purple.withOpacity(0.4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.purple.withOpacity(0.5),
-            blurRadius: 200,
-            spreadRadius: 150,
-          )
-        ],
-      ),
-    );
-  }
-}
+    // sample list of images
+    final List<String> imgList = [
+      'assets/images/homeBanner.png',
+      'assets/images/homeBanner.png',
+      'assets/images/homeBanner.png',
+    ];
 
-class BackColorRight extends StatelessWidget {
-  const BackColorRight({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 300,
-      height: 300,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.red.withOpacity(0.4),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.red.withOpacity(0.5),
-            blurRadius: 200,
-            spreadRadius: 150,
-          )
-        ],
+    return Center(
+      child: CarouselSlider(
+        options: CarouselOptions(
+          height: 200,
+          enlargeCenterPage: true, // active item bigger
+          autoPlay: true,          // auto slide
+          aspectRatio: 16 / 9,
+          autoPlayCurve: Curves.fastOutSlowIn,
+          enableInfiniteScroll: true,
+          autoPlayAnimationDuration: const Duration(milliseconds: 800),
+          viewportFraction: 0.8,   // show parts of next/prev images
+        ),
+        items: imgList.map((item) {
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    image: AssetImage(item),
+                    fit: BoxFit.cover,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 6,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        }).toList(),
       ),
     );
   }

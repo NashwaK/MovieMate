@@ -3,4 +3,6 @@ abstract class Routes {
   static const home = '/home';
   static const firstWelcome = '/firstWelcome';
   static const secondWelcome = '/secondWelcome';
+  static const movieDetails = '/movieDetails';
+  static const wishList = '/wishList';
 }
