@@ -45,16 +45,23 @@ class BgImagePart extends StatelessWidget {
                 ),
               ).cPadOnly(t: 10),
               GestureDetector(
-                onTap: (){
-                  // Get.back();
+                onTap: () {
+                  logic.toggleWishlist(logic.index.value);
+                  logic.update();
                 },
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                    shape: BoxShape.circle,
+                child: Obx(
+                      () => Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.favorite,
+                      size: 20,
+                      color: logic.favouriteButton.value ? Colors.red : Colors.white,
+                    ),
                   ),
-                  child: Icon(Icons.favorite, size: 20, color: Colors.white),
                 ),
               ).cPadOnly(t: 10),
             ],

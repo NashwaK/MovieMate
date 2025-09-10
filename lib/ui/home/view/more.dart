@@ -311,7 +311,15 @@ class CarouselPart extends StatelessWidget {
             itemBuilder: (context, index, realIndex) {
               var data = logic.moviesModelClass?.data?[index];
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Get.toNamed(
+                    Routes.movieDetails,
+                    parameters: {
+                      'index': '$index'
+                    },
+                  );
+                  logic.update();
+                },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(

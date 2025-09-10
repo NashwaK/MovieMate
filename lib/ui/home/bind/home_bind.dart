@@ -67,19 +67,46 @@ class HomeController extends GetxController {
   }
 }
 
-// class HomeController extends GetxController {
-//   static HomeController get to => Get.find();
+//   Future<void> getCustomerTransactionList() async {
+//     try {
+//       EasyLoading.show();
+//       10.cDelay(() {
+//         EasyLoading.dismiss();
+//       });
 //
-//   final PageController pageViewController =
-//   PageController(viewportFraction: 0.5);
-//   double currentPage = 0;
+//       moviesModelClass = await Api.to.getMovieList(page: page.value);
+//       EasyLoading.dismiss();
 //
-//   @override
-//   void onInit() {
-//     pageViewController.addListener(() {
-//         currentPage = pageViewController.page ?? 0;
-//         update();
-//     });
-//     super.onInit();
+//       if (moviesModelClass?.success ?? false) {
+//         if ((moviesModelClass?.data?.data ?? []).isNotEmpty) {
+//           dataRefresh = false.obs;
+//
+//           var data = moviesModelClass?.data?.data ?? [];
+//
+//           // ✅ Clear list only when fetching the first page
+//           if (page.value == 1) {
+//             customerList.clear();
+//           }
+//
+//           hasNextPage = (data.length == 10);
+//           customerList.addAll(data);
+//           update();
+//         } else {
+//           hasNextPage = false;
+//           // EasyLoading.showToast("No Transactions Found");
+//         }
+//       } else {
+//         Get.defaultDialog(
+//           title: 'Oops!!',
+//           middleText: moviesModelClass?.message ?? '',
+//         );
+//       }
+//     } catch (ex) {
+//       debugPrint('Error in getCustomerTransactionList: $ex');
+//     } finally {
+//       dataRefresh = false.obs;
+//       EasyLoading.dismiss();
+//       update();
+//     }
 //   }
 // }

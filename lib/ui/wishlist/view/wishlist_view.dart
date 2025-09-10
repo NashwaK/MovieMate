@@ -42,6 +42,4 @@ class WishlistView extends StatelessWidget {
       body: ListViewPart(),
     );
   }
-
-  /// Reusable detail row with icon + text
 }
