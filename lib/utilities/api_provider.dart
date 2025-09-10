@@ -1,6 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:movie_mate/model/MovieListModel.dart';
 import 'package:movie_mate/utilities/session_keys.dart';
 
 class Api extends GetConnect {
@@ -26,5 +28,18 @@ class Api extends GetConnect {
   void onInit() {
     super.onInit();
     httpClient.baseUrl = baseUrlCommon;
+  }
+
+  Future<MoviesModelClass> getMovieList({
+    required String id
+  }) {
+    return get(
+      'movies/infinite-scroll',
+    ).then((value) {
+      if (kDebugMode) {
+        print('movies list ========= > ${value.body}');
+      }
+      return MoviesModelClass.fromJson(value.body ?? err);
+    });
   }
 }

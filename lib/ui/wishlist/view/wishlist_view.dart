@@ -39,9 +39,7 @@ class WishlistView extends StatelessWidget {
         ),
       ),
       backgroundColor: primaryColor,
-      body: SafeArea(
-        child: ListViewPart()
-      ),
+      body: ListViewPart(),
     );
   }
 

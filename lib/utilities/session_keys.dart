@@ -1,1 +1,1 @@
-var baseUrlCommon = '';
+var baseUrlCommon = 'https://jsonfakery.com/';

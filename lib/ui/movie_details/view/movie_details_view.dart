@@ -54,9 +54,17 @@ class MovieDetailsView extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Spider Man No Way Home',style: customStyle(18, Colors.white, FontWeight.bold),
+                          Text('Doctor Strange',style: customStyle(18, Colors.white, FontWeight.bold),
                           ).cPadOnly(l: 15),
                           Text('English',style: customStyle(14, Colors.white, FontWeight.normal),
+                          ).cPadOnly(l: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Icon(Icons.star,color: Colors.yellow,size: 15,),
+                              Text('6.4',style: customStyle(14, Colors.white, FontWeight.normal),
+                              ).cPadOnly(l: 5),
+                            ],
                           ).cPadOnly(l: 15),
                         ],
                       ),
