@@ -215,7 +215,13 @@ class TrendingMovieGrid extends StatelessWidget {
             var data = logic.moviesModelClass?.data?[i];
             return GestureDetector(
               onTap: () {
-                Get.toNamed(Routes.movieDetails);
+                  Get.toNamed(
+                  Routes.movieDetails,
+                  parameters: {
+                    'index': '$i'
+                  },
+                );
+                logic.update();
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -304,50 +310,53 @@ class CarouselPart extends StatelessWidget {
             ),
             itemBuilder: (context, index, realIndex) {
               var data = logic.moviesModelClass?.data?[index];
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 6,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Stack(
-                    children: [
-                      // Background image
-                      Positioned.fill(
-                        child: Image.network(
-                          data?.backdropPath ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      // Bottom text with semi-transparent background
-                      Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: Container(
-                          color: Colors.black.withOpacity(0.6),
-                          padding: const EdgeInsets.all(8),
-                          child: Text(
-                            data?.originalTitle ?? '',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ).cToCenter,
-                        ),
+              return GestureDetector(
+                onTap: () {},
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 6,
+                        offset: const Offset(0, 4),
                       ),
                     ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Stack(
+                      children: [
+                        // Background image
+                        Positioned.fill(
+                          child: Image.network(
+                            data?.backdropPath ?? '',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        // Bottom text with semi-transparent background
+                        Positioned(
+                          bottom: 0,
+                          left: 0,
+                          right: 0,
+                          child: Container(
+                            color: Colors.black.withOpacity(0.6),
+                            padding: const EdgeInsets.all(8),
+                            child: Text(
+                              data?.originalTitle ?? '',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ).cToCenter,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -358,4 +367,3 @@ class CarouselPart extends StatelessWidget {
     );
   }
 }
-
