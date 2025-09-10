@@ -15,62 +15,108 @@ class BgImagePart extends StatelessWidget {
     return GetBuilder<MovieDetailsController>(
       builder: (logic) {
         var data = logic.moviesModelClass?.data?[logic.index.value];
+
         return Container(
-          padding: EdgeInsets.all(25),
           height: context.cHeight / 2,
           width: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(data?.posterPath ?? ''),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
+            fit: StackFit.expand,
             children: [
-              GestureDetector(
-                onTap: (){
-                  Get.back();
-                  print('hellllooooooooooooooooo');
-                  logic.update();
-                },
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.5),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(Icons.arrow_back_ios, size: 20, color: Colors.white).cPadOnly(l: 5),
-                ),
-              ).cPadOnly(t: 10),
-              GestureDetector(
-                onTap: () {
-                  logic.toggleWishlist(logic.index.value);
-                  logic.update();
-                },
-                child: Obx(
-                      () => Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.5),
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.favorite,
-                      size: 20,
-                      color: logic.favouriteButton.value ? Colors.red : Colors.white,
+              // ✅ Background image with placeholder/error/loading
+              if (data?.posterPath != null && data!.posterPath!.isNotEmpty)
+                Image.network(
+                  data.posterPath!,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    color: primaryColor,
+                    child: const Icon(
+                      Icons.broken_image,
+                      color: Colors.white54,
+                      size: 60,
                     ),
                   ),
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: Colors.black54,
+                      child: const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    );
+                  },
+                )
+              else
+                Container(
+                  color: primaryColor,
+                  child: const Icon(
+                    Icons.image_not_supported,
+                    color: Colors.white54,
+                    size: 60,
+                  ),
                 ),
-              ).cPadOnly(t: 10),
+
+              // ✅ Foreground controls (Back + Wishlist buttons)
+              Padding(
+                padding: const EdgeInsets.all(25),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.back();
+                        logic.update();
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.5),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          size: 20,
+                          color: Colors.white,
+                        ).cPadOnly(l: 5),
+                      ),
+                    ).cPadOnly(t: 10),
+
+                    GestureDetector(
+                      onTap: () {
+                        logic.toggleWishlist(logic.index.value);
+                        logic.update();
+                      },
+                      child: Obx(
+                            () => Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.favorite,
+                            size: 20,
+                            color: logic.favouriteButton.value
+                                ? Colors.red
+                                : Colors.white,
+                          ),
+                        ),
+                      ),
+                    ).cPadOnly(t: 10),
+                  ],
+                ),
+              ),
             ],
           ),
         );
-      }
+      },
     );
   }
 }
+
 
 class GradientOverlayPart extends StatelessWidget {
   const GradientOverlayPart({super.key});
@@ -185,11 +231,46 @@ class CastingList extends StatelessWidget {
                     child: Column(
                       children: [
                         ClipOval(
-                          child: Image.network(
-                            data?.profilePath ?? '',
+                          child: data?.profilePath != null && data!.profilePath!.isNotEmpty
+                              ? Image.network(
+                            data.profilePath!,
                             height: 120,
                             width: 120,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              height: 120,
+                              width: 120,
+                              color: Colors.grey.shade900,
+                              child: const Icon(
+                                Icons.broken_image,
+                                color: Colors.white54,
+                                size: 40,
+                              ),
+                            ),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                height: 120,
+                                width: 120,
+                                color: Colors.black54,
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                              : Container(
+                            height: 120,
+                            width: 120,
+                            color: Color.fromRGBO(1, 39, 91, 1.0),
+                            child: const Icon(
+                              Icons.person,
+                              color: Colors.white54,
+                              size: 40,
+                            ),
                           ),
                         ),
                         Text(

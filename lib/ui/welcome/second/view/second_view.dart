@@ -17,7 +17,7 @@ class SecondWelcomeView extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(homeBanner),
+                image: AssetImage(secondWelcome),
                 fit: BoxFit.cover,
               ),
             ),

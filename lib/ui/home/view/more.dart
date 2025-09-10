@@ -226,10 +226,6 @@ class TrendingMovieGrid extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: NetworkImage(data?.posterPath ?? ''),
-                    fit: BoxFit.cover,
-                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.2),
@@ -238,7 +234,43 @@ class TrendingMovieGrid extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: data?.posterPath != null && data!.posterPath!.isNotEmpty
+                      ? Image.network(
+                    data!.posterPath!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      color: Colors.grey.shade900,
+                      child: const Icon(
+                        Icons.broken_image,
+                        color: Colors.white54,
+                        size: 50,
+                      ),
+                    ),
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Container(
+                        color: Colors.black54,
+                        child: const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                      : Container(
+                    color: Colors.grey.shade800,
+                    child: const Icon(
+                      Icons.image_not_supported,
+                      color: Colors.white54,
+                      size: 50,
+                    ),
+                  ),
+                ),
+              )
             );
           },
         );
@@ -336,13 +368,43 @@ class CarouselPart extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                     child: Stack(
                       children: [
-                        // Background image
+                        // Background image with placeholder & error handling
                         Positioned.fill(
-                          child: Image.network(
-                            data?.backdropPath ?? '',
+                          child: data?.backdropPath != null && data!.backdropPath!.isNotEmpty
+                              ? Image.network(
+                            data!.backdropPath!,
                             fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => Container(
+                              color: Colors.grey.shade900,
+                              child: const Icon(
+                                Icons.broken_image,
+                                color: Colors.white54,
+                                size: 60,
+                              ),
+                            ),
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) return child;
+                              return Container(
+                                color: Colors.black54,
+                                child: const Center(
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                              : Container(
+                            color: Colors.grey.shade800,
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              color: Colors.white54,
+                              size: 60,
+                            ),
                           ),
                         ),
+
                         // Bottom text with semi-transparent background
                         Positioned(
                           bottom: 0,

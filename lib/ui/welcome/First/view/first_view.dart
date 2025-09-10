@@ -20,7 +20,7 @@ class FirstWelcomeView extends StatelessWidget {
             width: context.cWidth,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(homeBanner),
+                image: AssetImage(firstWelcome),
                 fit: BoxFit.cover,
               ),
             ),
@@ -34,7 +34,7 @@ class FirstWelcomeView extends StatelessWidget {
                 end: Alignment.bottomCenter,
                 colors: [
                   Colors.transparent,
-                  Colors.purple, // #9C9F8E with 90% opacity
+                  Colors.white, // #9C9F8E with 90% opacity
                   // Color.fromRGBO(156, 159, 142, 0.9), // #9C9F8E with 90% opacity
                 ],
                 stops: [0.5, 1.0],
@@ -53,8 +53,8 @@ class FirstWelcomeView extends StatelessWidget {
                   Text(
                     "Catch Every Blockbuster Without the Queue",
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: primaryColor,
                       // color: Color.fromRGBO(47, 48, 46, 1),
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
@@ -70,9 +70,12 @@ class FirstWelcomeView extends StatelessWidget {
                       padding: EdgeInsets.symmetric(vertical: 15),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25),
-                        color: Colors.white.withOpacity(0.8)
+                        color: primaryColor,
                       ),
-                      child: Text('Next',style: TextStyle(color: primaryColor,fontWeight: FontWeight.bold,fontSize: 16),).cToCenter,
+                      child: Text('Next',style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),).cToCenter,
                     ),
                   ),
                   const SizedBox(height: 30), // extra bottom padding

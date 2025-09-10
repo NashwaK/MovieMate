@@ -49,11 +49,46 @@ class MovieDetailsView extends StatelessWidget {
                       child: Row(
                         children: [
                           ClipOval(
-                            child: Image.network(
-                              data?.backdropPath ?? '',
+                            child: data?.backdropPath != null && data!.backdropPath!.isNotEmpty
+                                ? Image.network(
+                              data!.backdropPath!,
                               height: 120,
                               width: 120,
                               fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) => Container(
+                                height: 120,
+                                width: 120,
+                                color: Colors.grey.shade900,
+                                child: const Icon(
+                                  Icons.broken_image,
+                                  color: Colors.white54,
+                                  size: 40,
+                                ),
+                              ),
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  height: 120,
+                                  width: 120,
+                                  color: Colors.black54,
+                                  child: const Center(
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                                : Container(
+                              height: 120,
+                              width: 120,
+                              color: Colors.grey.shade800,
+                              child: const Icon(
+                                Icons.image_not_supported,
+                                color: Colors.white54,
+                                size: 40,
+                              ),
                             ),
                           ),
                           Column(
