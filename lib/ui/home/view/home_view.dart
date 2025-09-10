@@ -35,7 +35,7 @@ class HomeView extends GetView<HomeController> {
                           'Trending Movies',
                           style: customStyle(16, Colors.white, FontWeight.bold),
                         ),
-                        TrendingMovieGrid(),
+                        TrendingMovieGrid().cPadOnly(t: 10),
                         // Text(
                         //   'Best Movies',
                         //   style: customStyle(16, Colors.white, FontWeight.bold),
@@ -50,7 +50,7 @@ class HomeView extends GetView<HomeController> {
                   top: bannerHeight - carouselOverlap,
                   left: 0,
                   right: 0,
-                  child: CarouselExample(),
+                  child: CarouselPart(),
                 ),
               ],
             ),

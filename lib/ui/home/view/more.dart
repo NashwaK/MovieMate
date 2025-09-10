@@ -47,10 +47,7 @@ class FirstPart extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  primaryColor,
-                ],
+                colors: [Colors.transparent, primaryColor],
               ),
             ),
           ),
@@ -64,10 +61,15 @@ class FirstPart extends StatelessWidget {
               children: [
                 TextfieldPart().cExpanded(1),
                 IconButton(
-                    onPressed: (){
-                      Get.toNamed(Routes.wishList);
-                    },
-                    icon: Icon(Icons.favorite_border,size: 35,color: Colors.white,)).cPadOnly(t: 10).cExpanded(0)
+                  onPressed: () {
+                    Get.toNamed(Routes.wishList);
+                  },
+                  icon: Icon(
+                    Icons.favorite_border,
+                    size: 35,
+                    color: Colors.white,
+                  ),
+                ).cPadOnly(t: 10).cExpanded(0),
               ],
             ).cPadSymmetric(h: 10),
           ),
@@ -96,7 +98,10 @@ class TextfieldPart extends StatelessWidget {
             borderRadius: BorderRadius.circular(30.0),
             borderSide: BorderSide.none,
           ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 0,
+            horizontal: 20,
+          ),
         ),
       ),
     );
@@ -119,15 +124,23 @@ class OverlayProductsPart extends StatelessWidget {
             itemBuilder: (context, index) {
               // calculate vertical offset (lift the current item up)
               double offset = 0.0;
-              if (index == logic.currentPage.floor() || index == logic.currentPage.ceil()) {
-                offset = -20 *
-                    (1 - (logic.currentPage - index).abs()).clamp(0.0, 1.0); // move up to 20px
+              if (index == logic.currentPage.floor() ||
+                  index == logic.currentPage.ceil()) {
+                offset =
+                    -20 *
+                    (1 - (logic.currentPage - index).abs()).clamp(
+                      0.0,
+                      1.0,
+                    ); // move up to 20px
               }
 
               return Transform.translate(
                 offset: Offset(0, offset),
                 child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
@@ -150,14 +163,21 @@ class OverlayProductsPart extends StatelessWidget {
                         right: 0,
                         child: Center(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 8,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.6),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
                               'Indiana Johns',
-                              style: customStyle(14, Colors.black, FontWeight.bold),
+                              style: customStyle(
+                                14,
+                                Colors.black,
+                                FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),
@@ -174,10 +194,8 @@ class OverlayProductsPart extends StatelessWidget {
   }
 }
 
-
 class TrendingMovieGrid extends StatelessWidget {
   const TrendingMovieGrid({super.key});
-
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
@@ -189,20 +207,21 @@ class TrendingMovieGrid extends StatelessWidget {
             mainAxisSpacing: 12,
             childAspectRatio: 0.9,
           ),
-          itemCount: 10,
+          itemCount: logic.moviesModelClass?.data?.length ?? 0,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          // padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, i) {
+            var data = logic.moviesModelClass?.data?[i];
             return GestureDetector(
-              onTap: (){
+              onTap: () {
                 Get.toNamed(Routes.movieDetails);
               },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                   image: DecorationImage(
-                    image: AssetImage(homeBanner),
+                    image: NetworkImage(data?.posterPath ?? ''),
                     fit: BoxFit.cover,
                   ),
                   boxShadow: [
@@ -263,41 +282,32 @@ class TrendingMovieGrid extends StatelessWidget {
 //   }
 // }
 
-class CarouselExample extends StatelessWidget {
-  const CarouselExample({super.key});
+class CarouselPart extends StatelessWidget {
+  const CarouselPart({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // sample list of images
-    final List<String> imgList = [
-      'assets/images/homeBanner.png',
-      'assets/images/homeBanner.png',
-      'assets/images/homeBanner.png',
-    ];
-
-    return Center(
-      child: CarouselSlider(
-        options: CarouselOptions(
-          height: 200,
-          enlargeCenterPage: true, // active item bigger
-          autoPlay: true,          // auto slide
-          aspectRatio: 16 / 9,
-          autoPlayCurve: Curves.fastOutSlowIn,
-          enableInfiniteScroll: true,
-          autoPlayAnimationDuration: const Duration(milliseconds: 800),
-          viewportFraction: 0.8,   // show parts of next/prev images
-        ),
-        items: imgList.map((item) {
-          return Builder(
-            builder: (BuildContext context) {
+    return GetBuilder<HomeController>(
+      builder: (logic) {
+        return Center(
+          child: CarouselSlider.builder(
+            itemCount: logic.moviesModelClass?.data?.length ?? 0,
+            options: CarouselOptions(
+              height: 200,
+              enlargeCenterPage: true,
+              autoPlay: true,
+              aspectRatio: 16 / 9,
+              autoPlayCurve: Curves.fastOutSlowIn,
+              enableInfiniteScroll: true,
+              autoPlayAnimationDuration: const Duration(milliseconds: 800),
+              viewportFraction: 0.8,
+            ),
+            itemBuilder: (context, index, realIndex) {
+              var data = logic.moviesModelClass?.data?[index];
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    image: AssetImage(item),
-                    fit: BoxFit.cover,
-                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.2),
@@ -306,11 +316,46 @@ class CarouselExample extends StatelessWidget {
                     ),
                   ],
                 ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Stack(
+                    children: [
+                      // Background image
+                      Positioned.fill(
+                        child: Image.network(
+                          data?.backdropPath ?? '',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      // Bottom text with semi-transparent background
+                      Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Container(
+                          color: Colors.black.withOpacity(0.6),
+                          padding: const EdgeInsets.all(8),
+                          child: Text(
+                            data?.originalTitle ?? '',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ).cToCenter,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
             },
-          );
-        }).toList(),
-      ),
+          ),
+        );
+      },
     );
   }
 }
+

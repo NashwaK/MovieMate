@@ -30,9 +30,7 @@ class Api extends GetConnect {
     httpClient.baseUrl = baseUrlCommon;
   }
 
-  Future<MoviesModelClass> getMovieList({
-    required String id
-  }) {
+  Future<MoviesModelClass> getMovieList() {
     return get(
       'movies/infinite-scroll',
     ).then((value) {
