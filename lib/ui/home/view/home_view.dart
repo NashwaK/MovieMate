@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_utils/flutter_custom_utils.dart';
 import 'package:get/get_state_manager/src/simple/get_view.dart';
 import 'package:movie_mate/res/colors.dart';
+import 'package:movie_mate/res/style.dart';
 import 'package:movie_mate/ui/home/bind/home_bind.dart';
 import 'package:get/get.dart';
 import 'package:movie_mate/ui/home/view/more.dart';
@@ -12,27 +14,46 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: primaryColor,
-      body: CustomScrollView(
-        slivers: [
-          // Banner Section
-          SliverToBoxAdapter(
-            child: FirstPart(),
+      body: Stack(
+        children: [
+          // Main scrollable content
+          CustomScrollView(
+            slivers: [
+              // Banner Section (only FirstPart)
+              SliverToBoxAdapter(
+                child: FirstPart(),
+              ),
+
+              // Remaining content (other than overlapping ProductsPart)
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 140),
+                    // Add other content below
+                    Text(
+                      'Trending Movies',
+                      style: customStyle(16, Colors.white, FontWeight.bold),
+                    ),
+                    TrendingMovieGrid().cPadOnly(t: 15)
+                  ],
+                ).cPadAll(20),
+              ),
+            ],
           ),
 
-          // Content Section
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                ProductsPart()
-              ],
-            )
+          // Overlapping ProductsPart
+          Positioned(
+            top: context.cHeight * 0.4 - 110, // adjust overlap height
+            left: 0,
+            right: 0,
+            child: OverlayProductsPart(),
           ),
         ],
       ),
     );
   }
 }
-
 
 // class HomeView1 extends GetView<HomeController> {
 //   const HomeView1({super.key});

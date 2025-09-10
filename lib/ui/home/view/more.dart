@@ -96,15 +96,15 @@ class TextfieldPart extends StatelessWidget {
   }
 }
 
-class ProductsPart extends StatelessWidget {
-  const ProductsPart({super.key});
+class OverlayProductsPart extends StatelessWidget {
+  const OverlayProductsPart({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
       builder: (logic) {
         return SizedBox(
-          height: 220, // enough height for scaling
+          height: 240, // enough height for scaling
           child: PageView.builder(
             controller: logic.pageViewController,
             itemCount: 10,
@@ -145,11 +145,11 @@ class ProductsPart extends StatelessWidget {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: Colors.white.withOpacity(0.6),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Text(
-                              'data',
+                              'Indiana Johns',
                               style: customStyle(14, Colors.black, FontWeight.bold),
                             ),
                           ),
@@ -166,6 +166,48 @@ class ProductsPart extends StatelessWidget {
     );
   }
 }
+
+class TrendingMovieGrid extends StatelessWidget {
+  const TrendingMovieGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<HomeController>(
+      builder: (logic) {
+        return SizedBox(
+          height: 120,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 10,
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemBuilder: (context, i) {
+              return Container(
+                width: 190, // fixed width for each item
+                margin: const EdgeInsets.only(right: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    image: AssetImage(homeBanner),
+                    fit: BoxFit.cover,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
 
 
 // class ProductsPart extends StatelessWidget {
