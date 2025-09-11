@@ -16,97 +16,105 @@ class HomeBind implements Bindings {
 class HomeController extends GetxController {
   static HomeController get to => Get.find();
 
-  MoviesModelClass?moviesModelClass;
+  MoviesModelClass? moviesModelClass;
+  List<Data> moviesList = [];
+  int currentPage = 1;
+  int perPage = 20;
+  bool isLoading = false;
+  bool hasMore = true;
+  String? nextCursor;
 
   late PageController pageViewController;
-  double currentPage = 1.0;
+  late ScrollController scrollViewController;
+  double currentCarouselPage = 1.0;
 
   @override
   void onInit() {
     super.onInit();
     getMovies();
+
+    // Page controller for carousel
     pageViewController = PageController(
       initialPage: 1,
       viewportFraction: 0.8,
     );
 
     pageViewController.addListener(() {
-      currentPage = pageViewController.page ?? 1.0;
+      currentCarouselPage = pageViewController.page ?? 1.0;
       update();
     });
+
+    // Scroll controller for main content
+    scrollViewController = ScrollController();
+    scrollViewController.addListener(_scrollListener);
   }
 
-  Future<void> getMovies() async {
+  void _scrollListener() {
+    if (scrollViewController.position.pixels ==
+        scrollViewController.position.maxScrollExtent &&
+        !isLoading &&
+        hasMore) {
+      loadMoreMovies();
+    }
+  }
+
+  Future<void> getMovies({bool loadMore = false}) async {
+    if (isLoading) return;
+
     try {
-      // if (AppSession.to.session.read(SessionKeys.TOKEN) == null) {
-      //   return;
-      // }
-      EasyLoading.show();
-      10.cDelay(() {
-        EasyLoading.dismiss();
-      });
-      moviesModelClass = await Api.to.getMovieList();
-      EasyLoading.dismiss();
-      print('model profile ${moviesModelClass?.data?.length}');
-      // if (!(moviesModelClass?.success ?? false)) {
-      //   EasyLoading.showToast(moviesModelClass?.message ?? '');
-      //   // Get.snackbar(walletModel?.message ?? '', '');
-      // }
-      // dataRefresh = false.obs;
+      isLoading = true;
+
+      if (!loadMore) {
+        EasyLoading.show();
+        moviesList.clear();
+        currentPage = 1;
+        nextCursor = null;
+        hasMore = true;
+      }
+
+      moviesModelClass = await Api.to.getMovieList(
+        cursor: nextCursor,
+        perPage: perPage,
+      );
+
+      if (moviesModelClass != null && moviesModelClass!.data != null) {
+        moviesList.addAll(moviesModelClass!.data!);
+
+        // Update pagination info
+        nextCursor = moviesModelClass!.nextCursor;
+        hasMore = nextCursor != null && nextCursor!.isNotEmpty;
+
+        currentPage++;
+      }
+
+      update();
+
     } catch (ex) {
-      // dataRefresh = false.obs;
-      EasyLoading.dismiss();
       if (kDebugMode) {
         print('Exception : $ex');
       }
+      Get.snackbar('Error', 'Failed to load movies');
     } finally {
-      // dataRefresh = false.obs;
+      isLoading = false;
       EasyLoading.dismiss();
       update();
     }
   }
-}
 
-//   Future<void> getCustomerTransactionList() async {
-//     try {
-//       EasyLoading.show();
-//       10.cDelay(() {
-//         EasyLoading.dismiss();
-//       });
-//
-//       moviesModelClass = await Api.to.getMovieList(page: page.value);
-//       EasyLoading.dismiss();
-//
-//       if (moviesModelClass?.success ?? false) {
-//         if ((moviesModelClass?.data?.data ?? []).isNotEmpty) {
-//           dataRefresh = false.obs;
-//
-//           var data = moviesModelClass?.data?.data ?? [];
-//
-//           // ✅ Clear list only when fetching the first page
-//           if (page.value == 1) {
-//             customerList.clear();
-//           }
-//
-//           hasNextPage = (data.length == 10);
-//           customerList.addAll(data);
-//           update();
-//         } else {
-//           hasNextPage = false;
-//           // EasyLoading.showToast("No Transactions Found");
-//         }
-//       } else {
-//         Get.defaultDialog(
-//           title: 'Oops!!',
-//           middleText: moviesModelClass?.message ?? '',
-//         );
-//       }
-//     } catch (ex) {
-//       debugPrint('Error in getCustomerTransactionList: $ex');
-//     } finally {
-//       dataRefresh = false.obs;
-//       EasyLoading.dismiss();
-//       update();
-//     }
-//   }
-// }
+  void loadMoreMovies() {
+    if (!isLoading && hasMore) {
+      getMovies(loadMore: true);
+    }
+  }
+
+  void refreshMovies() {
+    getMovies(loadMore: false);
+  }
+
+  @override
+  void onClose() {
+    pageViewController.dispose();
+    scrollViewController.dispose();
+    super.onClose();
+  }
+}

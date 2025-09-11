@@ -30,14 +30,35 @@ class Api extends GetConnect {
     httpClient.baseUrl = baseUrlCommon;
   }
 
-  Future<MoviesModelClass> getMovieList() {
+  Future<MoviesModelClass> getMovieList({String? cursor, int perPage = 20}) {
+    Map<String, dynamic> queryParams = {
+      'per_page': perPage.toString(),
+    };
+
+    if (cursor != null && cursor.isNotEmpty) {
+      queryParams['cursor'] = cursor;
+    }
+
     return get(
       'movies/infinite-scroll',
+      query: queryParams,
     ).then((value) {
       if (kDebugMode) {
-        print('movies list ========= > ${value.body}');
+        print('movieList cursor: $cursor');
+        print('Status: ${value.statusCode}');
+        print('Response: ${value.body}');
       }
-      return MoviesModelClass.fromJson(value.body ?? err);
+
+      if (value.statusCode == 200 && value.body != null) {
+        return MoviesModelClass.fromJson(value.body);
+      } else {
+        throw Exception('Failed to load movies: ${value.statusCode}');
+      }
+    }).catchError((error) {
+      if (kDebugMode) {
+        print('API Error: $error');
+      }
+      throw error;
     });
   }
 }

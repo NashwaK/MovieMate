@@ -108,94 +108,9 @@ class TextfieldPart extends StatelessWidget {
   }
 }
 
-class OverlayProductsPart extends StatelessWidget {
-  const OverlayProductsPart({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-      builder: (logic) {
-        return SizedBox(
-          height: 240,
-          child: PageView.builder(
-            controller: logic.pageViewController,
-            itemCount: 10,
-            physics: const BouncingScrollPhysics(),
-            itemBuilder: (context, index) {
-              // calculate vertical offset (lift the current item up)
-              double offset = 0.0;
-              if (index == logic.currentPage.floor() ||
-                  index == logic.currentPage.ceil()) {
-                offset =
-                    -20 *
-                    (1 - (logic.currentPage - index).abs()).clamp(
-                      0.0,
-                      1.0,
-                    ); // move up to 20px
-              }
-
-              return Transform.translate(
-                offset: Offset(0, offset),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: AssetImage(homeBanner),
-                      fit: BoxFit.cover,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.15),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        bottom: 10,
-                        left: 0,
-                        right: 0,
-                        child: Center(
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.6),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Text(
-                              'Indiana Johns',
-                              style: customStyle(
-                                14,
-                                Colors.black,
-                                FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-}
-
 class TrendingMovieGrid extends StatelessWidget {
   const TrendingMovieGrid({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
@@ -207,21 +122,17 @@ class TrendingMovieGrid extends StatelessWidget {
             mainAxisSpacing: 12,
             childAspectRatio: 0.9,
           ),
-          itemCount: logic.moviesModelClass?.data?.length ?? 0,
+          itemCount: logic.moviesList.length,
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
           itemBuilder: (context, i) {
-            var data = logic.moviesModelClass?.data?[i];
+            var data = logic.moviesList[i];
             return GestureDetector(
               onTap: () {
-                  Get.toNamed(
+                Get.toNamed(
                   Routes.movieDetails,
-                  parameters: {
-                    'index': '$i'
-                  },
+                  parameters: {'index': '$i'},
                 );
-                logic.update();
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -236,9 +147,9 @@ class TrendingMovieGrid extends StatelessWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(16),
-                  child: data?.posterPath != null && data!.posterPath!.isNotEmpty
+                  child: data.posterPath != null && data.posterPath!.isNotEmpty
                       ? Image.network(
-                    data!.posterPath!,
+                    data.posterPath!,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
                       color: Colors.grey.shade900,
@@ -270,7 +181,7 @@ class TrendingMovieGrid extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             );
           },
         );
