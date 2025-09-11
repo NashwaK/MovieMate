@@ -68,7 +68,7 @@ class BgImagePart extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.offAllNamed(Routes.home);
+                        Get.back();
                       },
                       child: Container(
                         padding: const EdgeInsets.all(10),
