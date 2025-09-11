@@ -15,66 +15,101 @@ class FirstPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        // Background Image
-        Container(
-          height: context.cHeight * 0.4,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(homeBanner),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-
-        // Dark overlay (tint)
-        Container(
-          height: context.cHeight * 0.4,
-          width: double.infinity,
-          color: Colors.black.withOpacity(0.3),
-        ),
-
-        // Bottom gradient fade
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          child: Container(
-            height: 80,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.transparent, primaryColor],
+    return GetBuilder<HomeController>(
+      builder: (logic) {
+        return Stack(
+          children: [
+            // Background Image
+            Container(
+              height: context.cHeight * 0.4,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(homeBanner),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-        ),
 
-        // Top Content
-        Positioned.fill(
-          child: SafeArea(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextfieldPart().cExpanded(1),
-                IconButton(
-                  onPressed: () {
-                    Get.toNamed(Routes.wishList);
-                  },
-                  icon: Icon(
-                    Icons.favorite_border,
-                    size: 35,
-                    color: Colors.white,
+            // Dark overlay (tint)
+            Container(
+              height: context.cHeight * 0.4,
+              width: double.infinity,
+              color: Colors.black.withOpacity(0.3),
+            ),
+
+            // Bottom gradient fade
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                height: 80,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [Colors.transparent, primaryColor],
                   ),
-                ).cPadOnly(t: 10).cExpanded(0),
-              ],
-            ).cPadSymmetric(h: 10),
-          ),
-        ),
-      ],
+                ),
+              ),
+            ),
+
+            // Top Content
+            Positioned.fill(
+              child: SafeArea(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextfieldPart().cExpanded(1),
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            Get.toNamed(Routes.wishList);
+                          },
+                          icon: const Icon(
+                            Icons.favorite_border,
+                            size: 35,
+                            color: Colors.white,
+                          ),
+                        ).cPadOnly(t: 10).cExpanded(0),
+
+                        // Badge for count
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              color: primaryColor,
+                              shape: BoxShape.circle
+                            ),
+                            constraints: const BoxConstraints(
+                              minWidth: 18,
+                              minHeight: 18,
+                            ),
+                            child: Text(
+                              '${logic.wishlist.length ?? 0}',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ).cPadSymmetric(h: 10),
+              ),
+            ),
+          ],
+        );
+      }
     );
   }
 }
@@ -244,6 +279,7 @@ class CarouselPart extends StatelessWidget {
             options: CarouselOptions(
               height: 200,
               enlargeCenterPage: true,
+
               autoPlay: true,
               aspectRatio: 16 / 9,
               autoPlayCurve: Curves.fastOutSlowIn,
@@ -255,13 +291,13 @@ class CarouselPart extends StatelessWidget {
               var data = logic.moviesModelClass?.data?[index];
               return GestureDetector(
                 onTap: () {
-                  Get.toNamed(
-                    Routes.movieDetails,
-                    parameters: {
-                      'index': '$index'
-                    },
-                  );
-                  logic.update();
+                  // Get.toNamed(
+                  //   Routes.movieDetails,
+                  //   parameters: {
+                  //     'index': '$index'
+                  //   },
+                  // );
+                  // logic.update();
                 },
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),

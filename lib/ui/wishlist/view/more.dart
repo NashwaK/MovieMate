@@ -20,6 +20,41 @@ class ListViewPart extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
+
+        // Check if wishlist is empty
+        if (logic.wishlist.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.favorite_border,
+                  size: 64,
+                  color: Colors.grey,
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'No movies in wishlist',
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Add movies to your wishlist to see them here',
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 14,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          );
+        }
+
         return ListView.builder(
           padding: const EdgeInsets.all(20),
           itemCount: logic.wishlist.length,

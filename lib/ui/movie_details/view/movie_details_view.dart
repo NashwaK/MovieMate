@@ -91,22 +91,31 @@ class MovieDetailsView extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(data?.originalTitle ?? '',style: customStyle(18, Colors.white, FontWeight.bold),
-                              ).cPadOnly(l: 15),
-                              Text(data?.originalLanguage ?? '',style: customStyle(14, Colors.white, FontWeight.normal),
-                              ).cPadOnly(l: 15),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Icon(Icons.star,color: Colors.yellow,size: 15,),
-                                  Text('${data?.voteAverage ?? '0'}',style: customStyle(14, Colors.white, FontWeight.normal),
-                                  ).cPadOnly(l: 5),
-                                ],
-                              ).cPadOnly(l: 15),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(data?.originalTitle ?? '',style: customStyle(18, Colors.white, FontWeight.bold,),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ).cPadOnly(l: 15),
+                                Text(
+                                  ((data?.originalLanguage ?? '') == 'en')
+                                      ? 'English'
+                                      : (data?.originalLanguage ?? ''),
+                                  style: customStyle(14, Colors.white, FontWeight.normal),
+                                ).cPadOnly(l: 15),
+
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.star,color: Colors.yellow,size: 15,),
+                                    Text('${data?.voteAverage ?? '0'}',style: customStyle(14, Colors.white, FontWeight.normal),
+                                    ).cPadOnly(l: 5),
+                                  ],
+                                ).cPadOnly(l: 15),
+                              ],
+                            ),
                           ),
                         ],
                       ),

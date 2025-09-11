@@ -5,6 +5,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:movie_mate/model/MovieListModel.dart';
 import 'package:movie_mate/utilities/api_provider.dart';
+import 'package:movie_mate/utilities/com_binding.dart';
+import 'package:movie_mate/utilities/session_keys.dart';
 
 class HomeBind implements Bindings {
   @override
@@ -28,10 +30,17 @@ class HomeController extends GetxController {
   late ScrollController scrollViewController;
   double currentCarouselPage = 1.0;
 
+  var wishlist = <int>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     getMovies();
+
+    List<int> storedWishlist = AppSession.to.session.read(SessionKeys.FAVOURITE)?.cast<int>() ?? [];
+    print('hgfghii==>$storedWishlist');
+    wishlist.value = storedWishlist;
+    print('wish print itemmmm==>${wishlist.length}');
 
     // Page controller for carousel
     pageViewController = PageController(

@@ -6,6 +6,7 @@ import 'package:movie_mate/res/colors.dart';
 import 'package:movie_mate/res/images.dart';
 import 'package:movie_mate/res/style.dart';
 import 'package:movie_mate/ui/movie_details/bind/movie_details_bind.dart';
+import 'package:movie_mate/utilities/app_route.dart';
 
 class BgImagePart extends StatelessWidget {
   const BgImagePart({super.key});
@@ -67,8 +68,7 @@ class BgImagePart extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.back();
-                        logic.update();
+                        Get.offAllNamed(Routes.home);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(10),
