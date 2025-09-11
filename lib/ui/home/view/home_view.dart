@@ -36,20 +36,22 @@ class HomeView extends GetView<HomeController> {
                 complete: Icon(Icons.check, color: Colors.white),
               ),
               child: CustomScrollView(
-                controller: logic.scrollViewController, // Use the correct controller
+
+                controller: logic.scrollViewController,
                 slivers: [
                   SliverToBoxAdapter(
                     child: Stack(
                       clipBehavior: Clip.none,
                       children: [
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const FirstPart(),
-                            const SizedBox(height: carouselHeight - carouselOverlap - 45),
+                            const SizedBox(height: carouselHeight - carouselOverlap -20),
                             Text(
                               'Trending Movies',
                               style: customStyle(16, Colors.white, FontWeight.bold),
-                            ).cPadSymmetric(h: 20, v: 0),
+                            ).cPadSymmetric(h: 20),
                           ],
                         ),
                         Positioned(
@@ -63,7 +65,7 @@ class HomeView extends GetView<HomeController> {
                   ),
                   // Use SliverList for the grid to enable proper scrolling
                   SliverToBoxAdapter(
-                    child: const TrendingMovieGrid().cPadSymmetric(h: 20, v: 20),
+                    child: const TrendingMovieGrid().cPadSymmetric(h: 20,),
                   ),
                   // Add loading indicator at the bottom
                   SliverToBoxAdapter(
