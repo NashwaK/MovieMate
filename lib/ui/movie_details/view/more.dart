@@ -224,7 +224,7 @@ class CastingList extends StatelessWidget {
             SizedBox(
               height: 155,
               child: ListView.builder(
-                itemCount: 10,
+                itemCount: logic.moviesModelClass?.data?[logic.index.value].casts?.length ?? 0,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, i) {
                   var data = logic.moviesModelClass?.data?[logic.index.value].casts?[i];
