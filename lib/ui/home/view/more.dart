@@ -16,100 +16,103 @@ class FirstPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(
-      builder: (logic) {
-        return Stack(
-          children: [
-            // Background Image
-            Container(
-              height: context.cHeight * 0.4,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(homeBanner),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-
-            // Dark overlay (tint)
-            Container(
-              height: context.cHeight * 0.4,
-              width: double.infinity,
-              color: Colors.black.withOpacity(0.3),
-            ),
-
-            // Bottom gradient fade
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 80,
+        builder: (logic) {
+          return Stack(
+            children: [
+              // Background Image
+              Container(
+                height: context.cHeight * 0.4,
+                width: double.infinity,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [Colors.transparent, primaryColor],
+                  image: DecorationImage(
+                    image: AssetImage(homeBanner),
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
-            ),
 
-            // Top Content
-            Positioned.fill(
-              child: SafeArea(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextfieldPart().cExpanded(1),
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            Get.toNamed(Routes.wishList);
-                          },
-                          icon: const Icon(
-                            Icons.favorite_border,
-                            size: 35,
-                            color: Colors.white,
-                          ),
-                        ).cPadOnly(t: 10).cExpanded(0),
-
-                        // Badge for count
-                        Positioned(
-                          right: 8,
-                          top: 8,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: primaryColor,
-                              shape: BoxShape.circle
-                            ),
-                            constraints: const BoxConstraints(
-                              minWidth: 18,
-                              minHeight: 18,
-                            ),
-                            child: Text(
-                              '${logic.wishlist.length ?? 0}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ).cPadSymmetric(h: 10),
+              // Dark overlay (tint)
+              Container(
+                height: context.cHeight * 0.4,
+                width: double.infinity,
+                color: Colors.black.withOpacity(0.3),
               ),
-            ),
-          ],
-        );
-      }
+
+              // Bottom gradient fade
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: 80,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.transparent, primaryColor],
+                    ),
+                  ),
+                ),
+              ),
+
+              // Top Content
+              Positioned.fill(
+                child: SafeArea(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded( // Use regular Expanded here
+                        child: const TextfieldPart(),
+                      ),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          // Remove .cExpanded(0) from here
+                          IconButton(
+                            onPressed: () {
+                              Get.toNamed(Routes.wishList);
+                            },
+                            icon: const Icon(
+                              Icons.favorite_border,
+                              size: 35,
+                              color: Colors.white,
+                            ),
+                          ).cPadOnly(t: 10),
+
+                          // Badge for count
+                          Positioned(
+                            right: 8,
+                            top: 8,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                  color: primaryColor,
+                                  shape: BoxShape.circle
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 18,
+                                minHeight: 18,
+                              ),
+                              child: Text(
+                                '${logic.wishlist.length ?? 0}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ).cPadSymmetric(h: 10),
+                ),
+              ),
+            ],
+          );
+        }
     );
   }
 }

@@ -5,7 +5,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:movie_mate/res/colors.dart';
 import 'package:movie_mate/res/images.dart';
 import 'package:movie_mate/res/style.dart';
+import 'package:movie_mate/ui/home/bind/home_bind.dart';
 import 'package:movie_mate/ui/movie_details/bind/movie_details_bind.dart';
+import 'package:movie_mate/ui/wishlist/bind/wishlist_bind.dart';
 import 'package:movie_mate/utilities/app_route.dart';
 
 class BgImagePart extends StatelessWidget {
@@ -23,7 +25,6 @@ class BgImagePart extends StatelessWidget {
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // ✅ Background image with placeholder/error/loading
               if (data?.posterPath != null && data!.posterPath!.isNotEmpty)
                 Image.network(
                   data.posterPath!,
@@ -59,7 +60,6 @@ class BgImagePart extends StatelessWidget {
                   ),
                 ),
 
-              // ✅ Foreground controls (Back + Wishlist buttons)
               Padding(
                 padding: const EdgeInsets.all(25),
                 child: Row(
@@ -68,6 +68,8 @@ class BgImagePart extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        HomeController.to.onInit();
+                        WishlistController.to.onInit();
                         Get.back();
                       },
                       child: Container(

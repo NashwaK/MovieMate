@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'package:movie_mate/ui/home/view/more.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class HomeView extends GetView<HomeController> {
-  HomeView({super.key});
+class HomeView extends StatelessWidget {
+   HomeView({super.key});
 
   final RefreshController _refreshController = RefreshController();
 

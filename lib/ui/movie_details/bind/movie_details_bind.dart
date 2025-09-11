@@ -3,6 +3,8 @@ import 'package:flutter_custom_utils/flutter_custom_utils.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:movie_mate/model/MovieListModel.dart';
+import 'package:movie_mate/ui/home/bind/home_bind.dart';
+import 'package:movie_mate/ui/wishlist/bind/wishlist_bind.dart';
 import 'package:movie_mate/utilities/api_provider.dart';
 import 'package:movie_mate/utilities/com_binding.dart';
 import 'package:movie_mate/utilities/session_keys.dart';
@@ -11,6 +13,8 @@ class MovieDetailsBind implements Bindings {
   @override
   void dependencies() {
     Get.put(MovieDetailsController());
+    Get.lazyPut<HomeController>(() => HomeController(), fenix: true,);
+    Get.lazyPut<WishlistController>(() => WishlistController(), fenix: true,);
   }
 }
 
